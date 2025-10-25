@@ -24,16 +24,11 @@ final class AuthorController extends AbstractController
     #[Route('/add', name: 'author_addAuthor')]
     public function addAuthor(EntityManagerInterface $mr): Response
     {
-        // $manager = $mr->getManager()->getRepository(Author::class)->findAll();;
         $author = new Author();
         $author->setUsername("anasfdl");
         $author->setEmail("anas.chagour@gmail.com");
-        //$author->setNbBook(50);
-        // if ($author) {
         $mr->persist($author);
         $mr->flush();
-        // return new Response('added with succes');
-        // }
 
         return $this->redirectToRoute('author_getAuthors');
     }
@@ -54,20 +49,14 @@ final class AuthorController extends AbstractController
     }
 #[Route('/insert', name: 'author_insertAuthor')]
     public function insertAuthor(EntityManagerInterface $mr, Request $request): Response
-    {   // objet ou mettre les données
         $author = new Author();
-        //$book = new Book();
-        //$book->setTitle('les amis');
-        //$book->setPublished(true);
-        //$author->addBook($book);
-        // créer un formulaire et l'associer à l'objet $author
+        
         $form = $this->createForm(AuthorType::class, $author);
 
-        //remplir l'objet $author à partir du request
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $mr->persist($author); // générer le code sql sans exécution dans doctrine
-            $mr->flush(); // exécuter la requette dans la BD
+            $mr->persist($author); 
+            $mr->flush(); 
 
             return $this->redirectToRoute('author_getAuthors');
         }
@@ -81,7 +70,6 @@ final class AuthorController extends AbstractController
     {
         $author = new Author();
 
-        // get author By id to be updated
         $author = $mr->getRepository(Author::class)->find($id);
         $form = $this->createForm(AuthorType::class, $author);
         $form->handleRequest($request);
@@ -141,7 +129,7 @@ public function searchByBookCount(Request $req, AuthorRepository $authRepo): Res
     return $this->render('author/list.html.twig', [
         'form' => $form->createView(),
         'authors' => $authors,
-        'name' => '', // ✅ Ajout ici pour éviter l'erreur Twig
+        'name' => '',
     ]);
 }
 

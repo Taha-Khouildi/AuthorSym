@@ -24,10 +24,8 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer l'auteur depuis le formulaire
             $author = $book->getAuthor();
 
-            // Incrémenter nb_books
             if ($author !== null) {
                 $currentCount = $author->getNb_books() ?? 0;
                 $author->setNb_books($currentCount + 1);
@@ -80,14 +78,11 @@ public function showStats(BookRepository $bookRepo): Response
 #[Route('/books/statss', name: 'book_stats')]
 public function showStatsb(BookRepository $bookRepo): Response
 {
-    // Récupère tous les livres pour la boucle Twig
     $books = $bookRepo->findAll();
 
-    // Compte les livres publiés / non publiés
     $publishedCount = $bookRepo->countByPublished(true);
     $unpublishedCount = $bookRepo->countByPublished(false);
 
-    // Envoie les données au template
     return $this->render('book/list.html.twig', [
         'books' => $books,
         'publishedCount' => $publishedCount,
@@ -106,7 +101,7 @@ public function deleteBook(EntityManagerInterface $mr, int $id): Response
     $mr->remove($book);
     $mr->flush();
 
-    return $this->redirectToRoute('author_getBooks'); // ou 'book_getBooks' selon ta route
+    return $this->redirectToRoute('author_getBooks'); 
 }
 
 #[Route('/book/update/{id}', name: 'book_update')]
@@ -147,7 +142,6 @@ public function booksPublishedBetween(BookRepository $bookRepo): Response
 
     $books = $bookRepo->findPublishedBetween($start, $end);
 
-    // Stats
     $publishedCount = $bookRepo->countByPublished(true);
     $unpublishedCount = $bookRepo->countByPublished(false);
 
