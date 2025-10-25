@@ -1,0 +1,46 @@
+<h1>Liste des auteurs</h1>
+
+{# 🔍 Formulaire de recherche par nombre de livres (min / max) #}
+{{ form_start(form) }}
+    <div style="display: flex; gap: 10px; align-items: flex-end; margin-bottom: 1rem;">
+        {{ form_row(form.min) }}
+        {{ form_row(form.max) }}
+        {{ form_row(form.search) }}
+    </div>
+{{ form_end(form) }}
+
+{# 🔎 Formulaire de recherche par nom (existant, inchangé) #}
+<form method="get" action="{{ path('author_getAuthors') }}">
+	<input type="text" name="author" placeholder="Rechercher par nom..." value="{{ name }}">
+	<button type="submit">Rechercher</button>
+</form>
+
+{% if authors is empty %}
+	<p>Aucun auteur trouvé.</p>
+{% else %}
+	<p>Le tableau comporte {{ authors|length }} auteur(s).</p>
+
+	<table border="1">
+		<tr>
+			<th>Nom d'utilisateur</th>
+			<th>Email</th>
+			<th>Nb_books</th>
+			<th>Actions</th>
+		</tr>
+
+		{% for author in authors %}
+			<tr>
+				<td>{{ author.username }}</td>
+				<td>{{ author.email }}</td>
+				<td>{{ author.Nb_books }}</td>
+				<td>
+					<a href="{{ path('author_updateAuthor', { id: author.id }) }}">Edit</a> |
+					<a href="{{ path('author_delete', { id: author.id }) }}"
+					   onclick="return confirm('Voulez-vous vraiment supprimer cet auteur ?');">
+						Delete
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endif %}

@@ -1,0 +1,42 @@
+<h1>Liste des livres</h1>
+
+<table border="1">
+    <tr>
+        <th>Titre</th>
+        <th>Date de publication</th>
+        <th>Catégorie</th>
+        <th>Auteur</th>
+        <th>Publié</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.publishDate ? book.publishDate|date('Y-m-d H:i') : '' }}</td>
+            <td>{{ book.category }}</td>
+            <td>{{ book.author ? book.author.username : 'N/A' }}</td>
+            <td>{{ book.Published ? ' Oui' : ' Non' }}</td>
+            <td><!-- actions ici si besoin --></td>
+            <td>
+					<a href="{{ path('book_update', { id: book.id }) }}">Edit</a> |
+					<a href="{{ path('book_delete', { id: book.id }) }}"
+                    onclick="return confirm('Voulez-vous vraiment supprimer cet book ?');">
+						Delete
+					</a>
+                    <a href="{{ path('book_show', { id: book.id }) }}">show</a> |
+					   
+			</td>
+            <td>
+
+        </tr>
+    {% else %}
+        <tr><td colspan="6">Aucun livre trouvé</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Statistiques des livres</h2>
+<ul>
+    <li> Livres publiés : {{ publishedCount }}</li>
+    <li> Livres non publiés : {{ unpublishedCount }}</li>
+</ul>
